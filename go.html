@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>เปิดหน้ากรอกรายงานใน Chrome</title>
+<style>
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+    font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#382272;
+    background:linear-gradient(135deg,#ffd6dc,#ffe9cc,#fff6c2,#d4f7dc,#d3ecff,#e6d9ff)}
+  .card{background:#fff;border-radius:24px;padding:28px 24px;max-width:360px;margin:16px;
+    box-shadow:0 10px 30px rgba(56,34,114,.15);text-align:center}
+  h1{font-size:22px;margin:0 0 8px}
+  p{margin:6px 0 18px;line-height:1.5}
+  a.btn{display:block;padding:14px;border-radius:14px;margin:10px 0;text-decoration:none;font-weight:700}
+  .chrome{background:#6d4fd0;color:#fff}
+  .plain{background:#f1ebff;color:#382272}
+  small{color:#7a6aa8}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>🌈 รายงานการปฏิบัติงานส่วนบุคคล</h1>
+  <p>กำลังเปิดหน้ากรอกรายงานใน Google Chrome…</p>
+  <a class="btn chrome" id="chromeBtn" href="#">เปิดใน Chrome</a>
+  <a class="btn plain" id="plainBtn" href="#">เปิดในเบราว์เซอร์นี้แทน</a>
+  <small>บริษัท ไอเอ็มจี คอร์ปอเรชั่น จำกัด</small>
+</div>
+<script>
+(function(){
+  var TARGET = 'https://claude.ai/artifact/M6uFjS1xXXqjW9voggqaCC';
+  var hostPath = TARGET.replace(/^https:\/\//, '');
+  var ua = navigator.userAgent || '';
+  var isAndroid = /Android/i.test(ua);
+  var isIOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var isChrome = /Chrome|CriOS/i.test(ua) && !/EdgA|EdgiOS|SamsungBrowser|OPR|Line\/|FBAN|FBAV|Instagram|MicroMessenger/i.test(ua);
+
+  var chromeUrl = TARGET;
+  if (isAndroid) {
+    chromeUrl = 'intent://' + hostPath + '#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=' + encodeURIComponent(TARGET) + ';end';
+  } else if (isIOS) {
+    chromeUrl = 'googlechromes://' + hostPath;
+  }
+  document.getElementById('chromeBtn').href = chromeUrl;
+  document.getElementById('plainBtn').href = TARGET;
+
+  if (isChrome) {            // already in Chrome → go straight to the form
+    location.replace(TARGET);
+  } else {                   // try to hand off to Chrome automatically
+    location.href = chromeUrl;
+  }
+})();
+</script>
+</body>
+</html>
