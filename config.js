@@ -1,9 +1,9 @@
-/* ตั้งค่าเว็บรายงานการปฏิบัติงาน
- * SHEET_API_URL : URL ของ Google Apps Script Web App (ลงท้ายด้วย /exec)
- * SHEET_VIEW_URL: ลิงก์เปิด Google Sheet สำหรับผู้ดูแล (ไม่บังคับ)
- * ถ้าเว้นว่าง SHEET_API_URL เว็บจะทำงานโหมดทดลอง เก็บข้อมูลในเครื่องเท่านั้น */
+/* ตั้งค่าเว็บรายงานการปฏิบัติงาน (Supabase)
+ * SUPABASE_URL / SUPABASE_KEY : ค่าจาก Supabase > Project Settings > API
+ * ใช้ "publishable key" (เปิดเผยได้) เท่านั้น ห้ามใส่ service_role / secret key ในไฟล์นี้
+ * ผู้ดูแลระบบกำหนดในตาราง public.admins (ตอนนี้คือ img.inhouse@gmail.com) */
 window.APP_CONFIG = {
-  SHEET_API_URL: '',
-  SHEET_VIEW_URL: ''
+  SUPABASE_URL: 'https://gkswpadxemksdrpaxyel.supabase.co',
+  SUPABASE_KEY: 'sb_publishable_-A-DZLTKEKT4daMuT3uEig_ZbdXgj2d'
 };
-window.APP_VERSION = '1.0.0';
+window.APP_VERSION = '2.0.0';

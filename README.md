@@ -1,9 +1,9 @@
 # 🌈 รายงานการปฏิบัติงานส่วนบุคคล
 
-**เวอร์ชัน v1.0.0** · [ประวัติการอัปเดต](CHANGELOG.md)
+**เวอร์ชัน v2.0.0** · [ประวัติการอัปเดต](CHANGELOG.md) · เว็บ: https://imginhouse-cell.github.io/-/
 
-เว็บให้พนักงานกรอกรายงานงานประจำวัน แบ่ง 3 ช่วงเวลา แล้วกด **ส่งรายงาน** → ข้อมูลถูกบันทึกลง **Google Sheet** ทันที พร้อม **วัน/เดือน/ปี และเวลาที่ส่ง**
-ใช้ได้ทั้งมือถือ แท็บเล็ต และคอมพิวเตอร์
+พนักงาน **เข้าสู่ระบบด้วย Google (Gmail)** แล้วกรอกรายงานงานประจำวัน 3 ช่วงเวลา กด **ส่งรายงาน** ข้อมูลเก็บใน **Supabase** พร้อมวัน/เวลาที่ส่ง (เวลาจากเซิร์ฟเวอร์ ปลอมไม่ได้)
+ใช้ได้ทั้งมือถือ แท็บเล็ต คอมพิวเตอร์
 
 | ช่วง | เวลา |
 |---|---|
@@ -11,59 +11,48 @@
 | ช่วงที่ 2 | 13.00 – 17.00 น. |
 | ช่วงที่ 3 · OT | ระบุเวลาที่ทำเอง |
 
-แต่ละงานมี: **ลำดับ · งานที่ทำ · จำนวนที่ผลิต/ปฏิบัติได้ (+หน่วย) · เวลาเริ่ม · เวลาเสร็จ · ทำร่วมกับใคร** และท้ายรายงานมี **ลายเซ็น + ชื่อผู้ลงนาม + ลงวันที่**
+แต่ละงาน: **ลำดับ · งานที่ทำ · จำนวนที่ผลิต/ปฏิบัติได้ (+หน่วย) · เวลาเริ่ม · เวลาเสร็จ · ทำร่วมกับใคร** ท้ายรายงานมี **ลายเซ็น + ชื่อผู้ลงนาม + ลงวันที่**
 
-## โครงสร้างไฟล์
+## สิทธิ์การใช้งาน
+
+| ผู้ใช้ | ทำอะไรได้ |
+|---|---|
+| พนักงาน (ล็อกอินด้วย Gmail ของตัวเอง) | ส่งรายงาน · ดูรายงานของตัวเองเท่านั้น |
+| ผู้ดูแล `img.inhouse@gmail.com` | ดูรายงานทุกคน · กรองตามพนักงาน/วันที่ · แท็บสรุปผล · ลบ · Export |
+
+สิทธิ์ถูกบังคับที่ฐานข้อมูลด้วย Row Level Security ไม่ใช่แค่ซ่อนบนหน้าเว็บ
+เพิ่มผู้ดูแล: Supabase > SQL Editor > `insert into public.admins(email) values ('อีเมล@gmail.com');`
+
+## ไฟล์
 
 ```
-├── index.html            ← หน้าเว็บทั้งหมด
-├── config.js             ← ใส่ URL ของ Apps Script และลิงก์ Google Sheet
-├── apps-script/
-│   ├── Code.gs           ← หลังบ้าน วางใน Google Apps Script
-│   └── appsscript.json   ← ค่าตั้ง Apps Script (ใช้กับ clasp ได้)
+├── index.html            ← หน้าเว็บทั้งหมด (ล็อกอิน + ฟอร์ม + รายงาน + สรุป)
+├── config.js             ← SUPABASE_URL และ publishable key
+├── supabase/schema.sql   ← ตาราง, RLS, view report_items (ติดตั้งแล้ว)
 ├── CHANGELOG.md
-└── .nojekyll             ← ให้ GitHub Pages เสิร์ฟไฟล์ตรงๆ
+└── .nojekyll
 ```
 
-## ขั้นที่ 1 — ตั้งค่า Google Sheet (หลังบ้าน)
+## Supabase (ตั้งค่าแล้ว)
 
-1. สร้าง Google Sheet ใหม่ (หรือใช้ชีตเดิม)
-2. เมนู **ส่วนขยาย → Apps Script** ลบโค้ดเดิม แล้ววางโค้ดจาก [`apps-script/Code.gs`](apps-script/Code.gs) → บันทึก
-3. ตั้งรหัสผู้ดูแล: **⚙️ การตั้งค่าโปรเจ็กต์ → คุณสมบัติของสคริปต์ → เพิ่ม** ชื่อ `ADMIN_KEY` ใส่รหัสที่ต้องการ
-4. เลือกฟังก์ชัน **`setup`** แล้วกด **Run** → อนุญาตสิทธิ์ (Advanced → Go to project → Allow)
-   ระบบจะสร้างแท็บ **`รายงาน`** (1 แถว = 1 งาน) และ **`ข้อมูลดิบ`** (1 แถว = 1 รายงาน + ลายเซ็น)
-5. **Deploy → New deployment → Web app**
-   - Execute as: **Me**
-   - Who has access: **Anyone**
-6. คัดลอก **Web app URL** (ลงท้าย `/exec`)
+- โปรเจกต์ **work-report** (สิงคโปร์) · `https://gkswpadxemksdrpaxyel.supabase.co`
+- ตาราง `reports`, `profiles`, `admins` และ view `report_items` (1 แถว = 1 งาน)
+- ดูข้อมูล: Supabase > Table Editor > `reports` หรือ `report_items` → Export CSV ได้
 
-> แก้โค้ด Code.gs ภายหลัง ต้อง **Deploy → Manage deployments → ✏️ → Version: New version** ทุกครั้ง URL จะเหมือนเดิม
+### เปิดล็อกอินด้วย Google (ทำครั้งเดียว)
 
-## ขั้นที่ 2 — ใส่ URL ในเว็บ
+1. **Google Cloud Console** → APIs & Services → Credentials → *Create credentials* → **OAuth client ID** → Web application
+   - Authorized JavaScript origins: `https://imginhouse-cell.github.io`
+   - Authorized redirect URIs: `https://gkswpadxemksdrpaxyel.supabase.co/auth/v1/callback`
+2. คัดลอก **Client ID** และ **Client secret**
+3. **Supabase** → Authentication → Sign In / Providers → **Google** → Enable → วาง Client ID / Secret → Save
+4. **Supabase** → Authentication → URL Configuration
+   - Site URL: `https://imginhouse-cell.github.io/-/`
+   - Redirect URLs: `https://imginhouse-cell.github.io/-/**`
 
-แก้ไฟล์ [`config.js`](config.js)
+> ระหว่างที่ยังไม่เปิด Google ใช้ปุ่ม “รับลิงก์ทางอีเมล” ได้ (อีเมลระบบของ Supabase ส่งได้จำนวนจำกัดต่อชั่วโมง เหมาะกับทดสอบ)
 
-```js
-window.APP_CONFIG = {
-  SHEET_API_URL: 'https://script.google.com/macros/s/xxxxxxxx/exec',
-  SHEET_VIEW_URL: 'https://docs.google.com/spreadsheets/d/xxxxxxxx/edit'
-};
-```
+## ความปลอดภัย
 
-## ขั้นที่ 3 — ขึ้น GitHub Pages
-
-1. อัปโหลดไฟล์ทั้งหมดขึ้น repo นี้ (หรือ `git push`)
-2. **Settings → Pages → Build and deployment → Source: Deploy from a branch → Branch: `main` / `(root)` → Save**
-3. รอ 1–2 นาที จะได้ลิงก์ `https://<ชื่อผู้ใช้>.github.io/<ชื่อ repo>/` ส่งให้พนักงานใช้ได้เลย
-
-## การใช้งาน
-
-- **พนักงาน:** กรอกข้อมูล → เพิ่มงานในแต่ละช่วง → เซ็นชื่อ → กด **📨 ส่งรายงาน** (ระบบเก็บร่างไว้ในเครื่องระหว่างกรอก)
-- **แท็บ "รายงานที่ส่งแล้ว":** พนักงานเห็นรายงานที่ส่งจากเครื่องตัวเอง / **ผู้ดูแล** ใส่ `ADMIN_KEY` เพื่อดูของทุกคน ค้นหา กรองวันที่ ดูลายเซ็น พิมพ์ ลบ
-- **Export:** ปุ่ม *Export Excel (CSV)* หรือ *คัดลอกไปวางใน Google Sheet* — หรือเปิดแท็บ `รายงาน` ใน Google Sheet ได้โดยตรง
-
-## หมายเหตุด้านความปลอดภัย
-
-- อย่าใส่ `ADMIN_KEY` ลงในไฟล์ใดๆ บน GitHub — ตั้งใน Script Properties เท่านั้น
-- URL ของ Apps Script เปิดให้ "ส่งรายงาน" ได้ทุกคนที่มีลิงก์ แต่การ "ดู/ลบ" ต้องใช้รหัสผู้ดูแล
-- ถ้ายังไม่ใส่ `SHEET_API_URL` เว็บจะทำงานโหมดทดลอง เก็บข้อมูลไว้ในเบราว์เซอร์เครื่องนั้นเท่านั้น
+- `config.js` มีเฉพาะ **publishable key** ซึ่งเปิดเผยได้ ห้ามใส่ `service_role` / secret key ลงใน repo
+- ผู้ส่ง อีเมล และเวลาที่ส่ง ถูกกำหนดโดย trigger ในฐานข้อมูล
