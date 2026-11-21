@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>รายงานการปฏิบัติงานส่วนบุคคล</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&family=Anuphan:wght@600;700&display=swap" rel="stylesheet">
+<script src="config.js"></script>
+<style>
+:root{--g:#7c5cdb;--g2:#6d4fd0;--gl:#efe9ff;--gx:#faf7ff;--ink:#3b3355;--mut:#7c7495;--line:#ece6f7;--bg:#fdfbff;--rb:linear-gradient(120deg,#ffd6e7 0%,#ffe2c6 18%,#fff4b8 34%,#d4f5d2 50%,#c9ecfd 66%,#d9d3ff 82%,#f3d4ff 100%);--btn:linear-gradient(120deg,#f472b6,#fbbf24 28%,#4ade80 52%,#38bdf8 74%,#a78bfa);--red:#dc2626;--amb:#d97706;--r:14px}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{background:radial-gradient(900px 480px at 105% -10%,rgba(253,224,71,.22),transparent 60%),radial-gradient(800px 480px at -10% -5%,rgba(249,168,212,.28),transparent 60%),radial-gradient(900px 600px at 50% 110%,rgba(125,211,252,.22),transparent 60%),var(--bg)!important;margin:0;font-family:"Sarabun","Noto Sans Thai","Leelawadee UI",system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5}
+header{background:var(--rb);color:var(--ink);padding:18px 16px 54px}
+.wrap{max-width:1100px;margin:0 auto;padding:0 14px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+h1{margin:0;font-size:24px;font-family:"Anuphan","Sarabun",sans-serif}
+.ver{display:inline-block;margin-left:6px;font-size:12px;padding:1px 9px;border-radius:999px;background:#fff;color:var(--g2);vertical-align:middle}
+.sub{opacity:.9;font-size:13px}
+.clock{background:rgba(255,255,255,.6);border-radius:12px;padding:6px 12px;text-align:right;font-variant-numeric:tabular-nums}
+.clock b{font-size:20px;display:block}
+.tabs{display:flex;gap:6px;margin-top:-38px;position:relative}
+.tab{border:0;background:rgba(255,255,255,.55);color:var(--g2);padding:10px 16px;border-radius:12px 12px 0 0;font:inherit;font-weight:700;cursor:pointer}
+.tab.on{background:#fff}
+main{background:#fff;border-radius:0 var(--r) var(--r) var(--r);box-shadow:0 4px 18px rgba(20,60,30,.07);padding:18px;margin-bottom:30px}
+.card{border:1px solid var(--line);border-radius:var(--r);padding:14px 14px 14px 18px;margin-bottom:14px;background:#fff;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(#f9a8d4,#fcd34d,#86efac,#7dd3fc,#c4b5fd)}
+.card h3{margin:0 0 10px;font-size:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pill{background:var(--rb);color:var(--g2);border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+label{font-size:13px;color:var(--mut);display:block;margin-bottom:3px}
+input,select,textarea{width:100%;font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+input:focus,textarea:focus{outline:2px solid #c4b5fd;border-color:var(--g)}
+.btn{border:0;border-radius:10px;padding:9px 14px;font:inherit;font-weight:700;cursor:pointer;background:var(--gl);color:var(--g2);display:inline-flex;align-items:center;gap:6px}
+.btn.pri{background:var(--btn);color:#fff;text-shadow:0 1px 2px rgba(60,40,120,.35);box-shadow:0 8px 20px -10px rgba(124,92,219,.8)}.btn.pri:hover{filter:brightness(.95)}
+.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.btn.del{background:#fee2e2;color:var(--red)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.sm{padding:5px 10px;font-size:13px}
+table{width:100%;border-collapse:collapse}
+th,td{padding:6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:12px;color:var(--mut);font-weight:700;background:var(--gx)}
+.tasks td input{padding:7px 8px}
+.tasks .no{width:42px;text-align:center;font-weight:700;color:var(--g2);padding-top:12px}
+.qty{display:flex;gap:4px}.qty input:first-child{width:80px;flex:none}
+.ot{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--mut)}
+.ot input{width:auto}
+.sigbox{border:2px dashed #c4b5fd;border-radius:12px;background:var(--gx);position:relative;touch-action:none}
+canvas{display:block;width:100%;height:170px;cursor:crosshair}
+.sighint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#9bb5a3;pointer-events:none}
+.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.note{font-size:13px;color:var(--mut)}
+.banner{padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:14px}
+.banner.warn{background:#fef3c7;color:#92400e}.banner.info{background:var(--gx);color:var(--g2)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#14231a;color:#fff;padding:10px 16px;border-radius:10px;z-index:50;opacity:0;transition:.25s;pointer-events:none;max-width:90vw}
+.toast.on{opacity:1}
+.list td{font-size:14px}
+.empty{text-align:center;color:var(--mut);padding:30px}
+.modal{position:fixed;inset:0;background:rgba(10,30,15,.45);display:none;align-items:flex-start;justify-content:center;z-index:40;overflow:auto;padding:20px 10px}
+.modal.on{display:flex}
+.sheet{background:#fff;border-radius:var(--r);max-width:900px;width:100%;padding:18px}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px 14px;margin-bottom:12px;font-size:14px}
+.kv b{color:var(--mut);font-weight:600}
+.sigimg{max-width:260px;max-height:110px;border-bottom:1px solid #999}
+.stat{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.stat div{background:var(--gx);border-radius:12px;padding:8px 14px}.stat b{font-size:20px;color:var(--g2);display:block}
+code{background:#f1f5f2;padding:1px 5px;border-radius:5px}
+@media (max-width:720px){
+  .tasks thead{display:none}
+  .tasks tr{display:grid;grid-template-columns:1fr 1fr;gap:6px;border:1px solid var(--line);border-radius:12px;padding:8px;margin-bottom:8px}
+  .tasks td{border:0;padding:0}
+  .tasks td[data-l]::before{content:attr(data-l);display:block;font-size:12px;color:var(--mut)}
+  .tasks .no{grid-column:1/-1;text-align:left;padding:0}
+  .tasks .w2{grid-column:1/-1}
+  .list thead{display:none}.list tr{display:block;border:1px solid var(--line);border-radius:12px;padding:8px;margin-bottom:8px}.list td{display:block;border:0;padding:2px 0}
+}
+@media print{header,.tabs,.noprint,.toast{display:none!important}.modal{position:static;background:none;padding:0;display:block}.sheet{box-shadow:none}main{display:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap top">
+  <div><h1>🌈 รายงานการปฏิบัติงานส่วนบุคคล <span class="ver" id="ver"></span></h1><div class="sub">บันทึกงานประจำวัน 3 ช่วงเวลา · ส่งแล้วบันทึกวัน/เวลาอัตโนมัติ · บันทึกลง Google Sheet อัตโนมัติ</div></div>
+  <div class="clock"><span id="today"></span><b id="clock">--:--:--</b></div>
+</div></header>
+<div class="wrap">
+  <div class="tabs noprint"><button class="tab on" data-tab="form">✏️ กรอกรายงาน</button><button class="tab" data-tab="list">📂 รายงานที่ส่งแล้ว</button></div>
+  <main>
+    <div id="modeBanner"></div>
+
+    <!-- FORM -->
+    <section id="tab-form">
+      <div class="card">
+        <h3>👤 ข้อมูลผู้รายงาน</h3>
+        <div class="grid">
+          <div><label>ชื่อ-นามสกุล *</label><input id="fName" autocomplete="name"></div>
+          <div><label>รหัสพนักงาน</label><input id="fCode"></div>
+          <div><label>แผนก / ตำแหน่ง</label><input id="fDept"></div>
+          <div><label>วันที่ปฏิบัติงาน *</label><input id="fDate" type="date"></div>
+        </div>
+      </div>
+      <div id="periods"></div>
+      <div class="card">
+        <h3>✍️ ลงชื่อผู้รายงาน</h3>
+        <div class="grid" style="margin-bottom:10px">
+          <div><label>ชื่อผู้ลงนาม *</label><input id="fSignName"></div>
+          <div><label>ลงวันที่ (ว/ด/ป) *</label><input id="fSignDate" type="date"></div>
+        </div>
+        <div class="sigbox"><canvas id="sig"></canvas><div class="sighint" id="sigHint">เซ็นชื่อที่นี่ (ใช้นิ้วหรือเมาส์)</div></div>
+        <div class="actions" style="margin-top:8px"><button class="btn ghost sm" id="sigClear">ล้างลายเซ็น</button></div>
+      </div>
+      <div class="actions">
+        <span class="note" id="draftNote"></span>
+        <button class="btn ghost" id="resetBtn">ล้างฟอร์ม</button>
+        <button class="btn pri" id="submitBtn">📨 ส่งรายงาน</button>
+      </div>
+    </section>
+
+    <!-- LIST -->
+    <section id="tab-list" hidden>
+      <div class="card noprint">
+        <div class="grid">
+          <div><label>ตั้งแต่วันที่</label><input id="qFrom" type="date"></div>
+          <div><label>ถึงวันที่</label><input id="qTo" type="date"></div>
+          <div><label>ค้นหาชื่อ / รหัส / งาน</label><input id="qText" placeholder="พิมพ์เพื่อค้นหา"></div>
+        </div>
+        <div class="actions" style="margin-top:10px">
+          <button class="btn ghost sm" id="qClear">ล้างตัวกรอง</button>
+          <button class="btn sm" id="expCsv">⬇️ Export Excel (CSV)</button>
+          <button class="btn sm" id="expTsv">📋 คัดลอกไปวางใน Google Sheet</button>
+          <button class="btn ghost sm" id="reload">🔄 โหลดใหม่</button>
+        </div>
+      </div>
+      <div class="stat" id="stats"></div>
+      <div id="listBox"></div>
+      <div class="card noprint" id="adminBox">
+        <h3>🔐 ผู้ดูแล: ดูรายงานของทุกคน</h3>
+        <p class="note" id="adminNote">พนักงานทั่วไปจะเห็นเฉพาะรายงานที่ส่งจากเครื่องนี้ ผู้ดูแลใส่รหัส (ADMIN_KEY) เพื่อโหลดรายงานทั้งหมดจาก Google Sheet</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="adminKey" type="password" placeholder="รหัสผู้ดูแล" style="flex:1;min-width:200px"><button class="btn pri sm" id="adminLogin">เข้าสู่ระบบ</button><button class="btn ghost sm" id="adminLogout" hidden>ออกจากระบบ</button><a class="btn sm" id="sheetOpen" target="_blank" rel="noopener" hidden>📊 เปิด Google Sheet</a></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="modal" id="modal"><div class="sheet" id="modalBody"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const PERIODS=[
+  {key:'p1',name:'ช่วงที่ 1',time:'08.00 – 12.00 น.',start:'08:00',end:'12:00'},
+  {key:'p2',name:'ช่วงที่ 2',time:'13.00 – 17.00 น.',start:'13:00',end:'17:00'},
+  {key:'ot',name:'ช่วงที่ 3 · OT',time:'ระบุเวลาที่ทำ',start:'',end:''}
+];
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const isoDay=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const dmy=iso=>{if(!iso)return'';const[y,m,d]=iso.split('-');return d+'/'+m+'/'+(+y+543)};
+const dmyhm=ts=>{const d=new Date(ts);return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+(d.getFullYear()+543)+' '+pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds())};
+let downloads=null,store=null,state={reports:[],admin:false,key:'',canWrite:true,loaded:false,mode:'local'};
+const toast=(m,ms=2600)=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),ms)};
+
+/* ---------- form state ---------- */
+let form=blankForm();
+function blankForm(){const p={};PERIODS.forEach(x=>p[x.key]={otStart:'',otEnd:'',rows:[blankRow(x)]});return{name:'',code:'',dept:'',date:isoDay(new Date()),signName:'',signDate:isoDay(new Date()),periods:p}}
+function blankRow(per){return{task:'',qty:'',unit:'',start:per?per.start:'',end:per?per.end:'',with:''}}
+function loadDraft(){try{const d=JSON.parse(localStorage.getItem('wr-draft')||'null');if(d&&d.periods){form=Object.assign(blankForm(),d);form.date=form.date||isoDay(new Date());}const me=JSON.parse(localStorage.getItem('wr-me')||'null');if(me){form.name=form.name||me.name;form.code=form.code||me.code;form.dept=form.dept||me.dept;form.signName=form.signName||me.name}}catch(e){}}
+let draftT;function saveDraft(){clearTimeout(draftT);draftT=setTimeout(()=>{try{localStorage.setItem('wr-draft',JSON.stringify(form));$('#draftNote').textContent='บันทึกร่างไว้ในเครื่องแล้ว '+new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})}catch(e){}},500)}
+
+function renderForm(){
+  $('#fName').value=form.name;$('#fCode').value=form.code;$('#fDept').value=form.dept;$('#fDate').value=form.date;$('#fSignName').value=form.signName;$('#fSignDate').value=form.signDate;
+  $('#periods').innerHTML=PERIODS.map(per=>{const P=form.periods[per.key];return `<div class="card" data-p="${per.key}">
+    <h3>🕘 ${per.name} <span class="pill">${per.time}</span></h3>
+    ${per.key==='ot'?`<div class="ot" style="margin-bottom:8px">ช่วงเวลา OT: <input type="time" data-ot="otStart" value="${esc(P.otStart)}"> ถึง <input type="time" data-ot="otEnd" value="${esc(P.otEnd)}"> <span>(เว้นว่างได้ถ้าไม่มี OT)</span></div>`:''}
+    <table class="tasks"><thead><tr><th>ลำดับ</th><th>งานที่ทำ</th><th>จำนวนที่ผลิต / ปฏิบัติได้</th><th>เวลาเริ่ม</th><th>เวลาเสร็จ</th><th>ทำร่วมกับใคร</th><th></th></tr></thead><tbody>
+    ${P.rows.map((r,i)=>`<tr data-i="${i}">
+      <td class="no">${i+1}</td>
+      <td class="w2" data-l="งานที่ทำ"><input data-f="task" value="${esc(r.task)}" placeholder="เช่น ประกอบชิ้นงาน A"></td>
+      <td data-l="จำนวน"><div class="qty"><input data-f="qty" type="number" min="0" step="any" inputmode="decimal" value="${esc(r.qty)}" placeholder="0"><input data-f="unit" value="${esc(r.unit)}" placeholder="หน่วย"></div></td>
+      <td data-l="เวลาเริ่ม"><input data-f="start" type="time" value="${esc(r.start)}"></td>
+      <td data-l="เวลาเสร็จ"><input data-f="end" type="time" value="${esc(r.end)}"></td>
+      <td class="w2" data-l="ทำร่วมกับใคร"><input data-f="with" value="${esc(r.with)}" placeholder="ชื่อเพื่อนร่วมงาน (ถ้ามี)"></td>
+      <td><button class="btn del sm" data-del="${i}" title="ลบแถว">✕</button></td></tr>`).join('')}
+    </tbody></table>
+    <div class="actions" style="justify-content:flex-start;margin-top:8px"><button class="btn sm" data-add="${per.key}">＋ เพิ่มงาน</button></div></div>`}).join('');
+}
+document.addEventListener('input',e=>{
+  const t=e.target,id=t.id;
+  const map={fName:'name',fCode:'code',fDept:'dept',fDate:'date',fSignName:'signName',fSignDate:'signDate'};
+  if(map[id]){form[map[id]]=t.value;if(id==='fName'&&!form._signTouched){form.signName=t.value;$('#fSignName').value=t.value}if(id==='fSignName')form._signTouched=true;saveDraft();return}
+  const card=t.closest('[data-p]');if(!card)return;const P=form.periods[card.dataset.p];
+  if(t.dataset.ot){P[t.dataset.ot]=t.value;saveDraft();return}
+  const tr=t.closest('tr[data-i]');if(tr&&t.dataset.f){P.rows[+tr.dataset.i][t.dataset.f]=t.value;saveDraft()}
+});
+document.addEventListener('click',e=>{
+  const a=e.target.closest('[data-add]');if(a){const per=PERIODS.find(x=>x.key===a.dataset.add);const P=form.periods[per.key];const last=P.rows[P.rows.length-1];const r=blankRow(per);if(last&&last.end)r.start=last.end;if(per.key==='ot'){r.start=r.start||P.otStart;r.end=P.otEnd}P.rows.push(r);renderForm();saveDraft();const inp=$$(`[data-p="${per.key}"] input[data-f="task"]`).pop();inp&&inp.focus();return}
+  const d=e.target.closest('[data-del]');if(d){const card=d.closest('[data-p]');const P=form.periods[card.dataset.p];P.rows.splice(+d.dataset.del,1);if(!P.rows.length)P.rows.push(blankRow(PERIODS.find(x=>x.key===card.dataset.p)));renderForm();saveDraft()}
+});
+
+/* ---------- signature ---------- */
+const INK='#2b2250',cv=$('#sig'),cx=cv.getContext('2d');let drawing=false,hasSig=false,last=null;
+let snap=null,lastW=0;
+function sizeCanvas(){const r=cv.getBoundingClientRect(),dpr=window.devicePixelRatio||1;if(!r.width||Math.round(r.width*dpr)===lastW)return;lastW=Math.round(r.width*dpr);cv.width=r.width*dpr;cv.height=r.height*dpr;cx.setTransform(dpr,0,0,dpr,0,0);cx.lineWidth=2.4;cx.lineCap='round';cx.lineJoin='round';cx.strokeStyle=INK;cx.fillStyle=INK;if(snap){const im=new Image();im.onload=()=>{cx.save();cx.setTransform(1,0,0,1,0,0);cx.drawImage(im,0,0,cv.width,cv.height);cx.restore()};im.src=snap}}
+const pt=e=>{const r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}};
+cv.addEventListener('pointerdown',e=>{drawing=true;last=pt(e);cv.setPointerCapture(e.pointerId);cx.beginPath();cx.arc(last.x,last.y,1.1,0,7);cx.fill();hasSig=true;$('#sigHint').hidden=true});
+cv.addEventListener('pointermove',e=>{if(!drawing)return;const p=pt(e);cx.beginPath();cx.moveTo(last.x,last.y);cx.lineTo(p.x,p.y);cx.stroke();last=p});
+['pointerup','pointercancel','pointerleave'].forEach(ev=>cv.addEventListener(ev,()=>{if(drawing){drawing=false;try{snap=cv.toDataURL()}catch(e){}}}));
+$('#sigClear').onclick=()=>{cx.save();cx.setTransform(1,0,0,1,0,0);cx.clearRect(0,0,cv.width,cv.height);cx.restore();hasSig=false;snap=null;$('#sigHint').hidden=false};
+window.addEventListener('resize',sizeCanvas);
+function sigData(){// crop to the ink, scale to ≤400px wide
+  const W=cv.width,H=cv.height,d=cx.getImageData(0,0,W,H).data;let x0=W,y0=H,x1=-1,y1=-1;
+  for(let y=0;y<H;y+=2)for(let x=0;x<W;x+=2)if(d[(y*W+x)*4+3]>20){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y}
+  if(x1<0){x0=0;y0=0;x1=W-1;y1=H-1}const p=12*(window.devicePixelRatio||1);x0=Math.max(0,x0-p);y0=Math.max(0,y0-p);x1=Math.min(W,x1+p);y1=Math.min(H,y1+p);
+  const sw=x1-x0,sh=y1-y0,k=Math.min(1,400/sw,160/sh),c=document.createElement('canvas');c.width=Math.max(1,Math.round(sw*k));c.height=Math.max(1,Math.round(sh*k));
+  const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.drawImage(cv,x0,y0,sw,sh,0,0,c.width,c.height);return c.toDataURL('image/jpeg',.8)}
+
+/* ---------- submit ---------- */
+$('#resetBtn').onclick=()=>{if(!confirmInline('#resetBtn'))return;const keep={name:form.name,code:form.code,dept:form.dept};form=Object.assign(blankForm(),keep,{signName:keep.name});renderForm();$('#sigClear').click();saveDraft()};
+function confirmInline(sel){const b=$(sel);if(b.dataset.armed){delete b.dataset.armed;b.textContent=b.dataset.orig;return true}b.dataset.orig=b.textContent;b.dataset.armed=1;b.textContent='กดอีกครั้งเพื่อยืนยัน';setTimeout(()=>{if(b.dataset.armed){delete b.dataset.armed;b.textContent=b.dataset.orig}},3000);return false}
+$('#submitBtn').onclick=async()=>{
+  const errs=[];if(!form.name.trim())errs.push('ชื่อ-นามสกุล');if(!form.date)errs.push('วันที่ปฏิบัติงาน');
+  const periods={};let count=0;
+  PERIODS.forEach(per=>{const P=form.periods[per.key];const rows=P.rows.filter(r=>r.task.trim()||r.qty!=='').map((r,i)=>({no:i+1,task:r.task.trim(),qty:r.qty===''?'':Number(r.qty),unit:r.unit.trim(),start:r.start,end:r.end,with:r.with.trim()}));count+=rows.length;periods[per.key]={rows,otStart:P.otStart||'',otEnd:P.otEnd||''}});
+  if(!count)errs.push('งานอย่างน้อย 1 รายการ');
+  if(!form.signName.trim())errs.push('ชื่อผู้ลงนาม');if(!form.signDate)errs.push('วันที่ลงชื่อ');if(!hasSig)errs.push('ลายเซ็น');
+  if(errs.length){toast('กรุณากรอก: '+errs.join(', '),4000);return}
+  if(!state.canWrite){toast('บัญชีนี้ยังไม่มีสิทธิ์ส่งรายงาน กรุณาขอสิทธิ์จากผู้ดูแล',4000);return}
+  const now=new Date();
+  const rec={name:form.name.trim(),code:form.code.trim(),dept:form.dept.trim(),workDate:form.date,periods,signName:form.signName.trim(),signDate:form.signDate,signature:sigData(),submittedAt:now.toISOString(),submittedTs:now.getTime(),uid:''};
+  const btn=$('#submitBtn');btn.disabled=true;btn.textContent='กำลังส่ง…';
+  try{
+    const id=now.getTime().toString(36)+Math.random().toString(36).slice(2,7);
+    await store.put(id,rec);
+    rememberMine(Object.assign({id},rec));
+    try{localStorage.setItem('wr-me',JSON.stringify({name:rec.name,code:rec.code,dept:rec.dept}));localStorage.removeItem('wr-draft')}catch(e){}
+    showReceipt(Object.assign({id},rec));
+    if(state.admin)refresh();
+    const keep={name:rec.name,code:rec.code,dept:rec.dept};form=Object.assign(blankForm(),keep,{signName:rec.signName});renderForm();$('#sigClear').click();$('#draftNote').textContent='';
+  }catch(e){console.error(e);toast('ส่งไม่สำเร็จ: '+(e&&e.message||e),5000)}
+  finally{btn.disabled=false;btn.textContent='📨 ส่งรายงาน'}
+};
+
+/* ---------- flatten (for export) ---------- */
+function flatRows(r){const out=[];PERIODS.forEach(per=>{const P=(r.periods||{})[per.key];if(!P)return;(P.rows||[]).forEach(x=>out.push({
+  'วันที่ส่ง':dmyhm(r.submittedTs||Date.parse(r.submittedAt)),'ชื่อ-นามสกุล':r.name,'รหัสพนักงาน':r.code,'แผนก/ตำแหน่ง':r.dept,'วันที่ปฏิบัติงาน':dmy(r.workDate),
+  'ช่วงเวลา':per.name+(per.key==='ot'?(P.otStart?' '+P.otStart+'-'+(P.otEnd||''):''):' '+per.time),'ลำดับ':x.no,'งานที่ทำ':x.task,'จำนวน':x.qty,'หน่วย':x.unit,'เวลาเริ่ม':x.start,'เวลาเสร็จ':x.end,'ทำร่วมกับ':x.with,'ลงชื่อ':r.signName,'ลงวันที่':dmy(r.signDate),'รหัสรายงาน':r.id}))});return out}
+
+/* ---------- receipt / detail ---------- */
+function detailHtml(r){return `<h2 style="margin:0 0 4px">รายงานการปฏิบัติงานส่วนบุคคล</h2><div class="note" style="margin-bottom:10px">ส่งเมื่อ ${esc(dmyhm(r.submittedTs))} · รหัสรายงาน ${esc(r.id)}</div>
+  <div class="kv"><div><b>ชื่อ-นามสกุล:</b> ${esc(r.name)}</div><div><b>รหัสพนักงาน:</b> ${esc(r.code||'-')}</div><div><b>แผนก/ตำแหน่ง:</b> ${esc(r.dept||'-')}</div><div><b>วันที่ปฏิบัติงาน:</b> ${esc(dmy(r.workDate))}</div></div>
+  ${PERIODS.map(per=>{const P=(r.periods||{})[per.key]||{rows:[]};return `<h4 style="margin:12px 0 4px">${per.name} <span class="pill">${per.key==='ot'?(P.otStart?esc(P.otStart+' – '+P.otEnd+' น.'):'ไม่มี OT'):per.time}</span></h4>
+  ${P.rows.length?`<table><thead><tr><th>ลำดับ</th><th>งานที่ทำ</th><th>จำนวน</th><th>เริ่ม</th><th>เสร็จ</th><th>ทำร่วมกับ</th></tr></thead><tbody>${P.rows.map(x=>`<tr><td>${x.no}</td><td>${esc(x.task)}</td><td>${esc(x.qty)} ${esc(x.unit)}</td><td>${esc(x.start)}</td><td>${esc(x.end)}</td><td>${esc(x.with||'-')}</td></tr>`).join('')}</tbody></table>`:'<div class="note">— ไม่มีรายการ —</div>'}`}).join('')}
+  <div style="margin-top:16px;text-align:right"><img class="sigimg" src="${esc(r.signature||'')}" alt="ลายเซ็น"><div>( ${esc(r.signName)} )</div><div class="note">ลงวันที่ ${esc(dmy(r.signDate))}</div></div>`}
+function openModal(html){$('#modalBody').innerHTML=html+`<div class="actions noprint" style="margin-top:14px"><button class="btn ghost" onclick="window.print()">🖨️ พิมพ์</button><button class="btn pri" id="mClose">ปิด</button></div>`;$('#modal').classList.add('on');$('#mClose').onclick=closeModal}
+function closeModal(){$('#modal').classList.remove('on')}
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+function showReceipt(r){openModal(`<div class="banner info">✅ ส่งรายงานเรียบร้อย บันทึกเวลาส่ง <b>${esc(dmyhm(r.submittedTs))}</b></div>`+detailHtml(r))}
+
+/* ---------- list ---------- */
+function filtered(){const f=$('#qFrom').value,t=$('#qTo').value,q=$('#qText').value.trim().toLowerCase();
+  return state.reports.filter(r=>(!f||r.workDate>=f)&&(!t||r.workDate<=t)&&(!q||JSON.stringify([r.name,r.code,r.dept,r.periods]).toLowerCase().includes(q)))
+   .sort((a,b)=>(b.submittedTs||0)-(a.submittedTs||0))}
+function renderList(){const L=filtered();
+  const tasks=L.reduce((s,r)=>s+PERIODS.reduce((n,p)=>n+(((r.periods||{})[p.key]||{}).rows||[]).length,0),0);
+  const people=new Set(L.map(r=>r.name)).size;
+  $('#stats').innerHTML=`<div><b>${L.length}</b>รายงาน</div><div><b>${people}</b>คน</div><div><b>${tasks}</b>รายการงาน</div>`+`<div><b style="font-size:14px">${state.admin?'🔓 ผู้ดูแล':'📱 ของฉัน'}</b>${state.admin?(state.mode==='sheet'?'ทุกคนจาก Google Sheet':'ทุกรายงานในเครื่องนี้'):'ส่งจากเครื่องนี้'}</div>`;
+  if(!state.loaded){$('#listBox').innerHTML='<div class="empty">กำลังโหลด…</div>';return}
+  if(!L.length){$('#listBox').innerHTML='<div class="empty">ยังไม่มีรายงานในช่วงที่เลือก</div>';return}
+  $('#listBox').innerHTML=`<table class="list"><thead><tr><th>ส่งเมื่อ</th><th>ชื่อ</th><th>วันที่ปฏิบัติงาน</th><th>จำนวนงาน (ช่วง1/2/OT)</th><th></th></tr></thead><tbody>${L.map(r=>{const c=PERIODS.map(p=>(((r.periods||{})[p.key]||{}).rows||[]).length);return `<tr><td>${esc(dmyhm(r.submittedTs))}</td><td><b>${esc(r.name)}</b><div class="note">${esc([r.code,r.dept].filter(Boolean).join(' · '))}</div></td><td>${esc(dmy(r.workDate))}</td><td>${c.join(' / ')}</td><td style="white-space:nowrap"><button class="btn sm" data-view="${esc(r.id)}">ดู</button>${state.admin?` <button class="btn del sm" data-rm="${esc(r.id)}">ลบ</button>`:''}</td></tr>`}).join('')}</tbody></table>`;
+}
+$('#listBox').addEventListener('click',async e=>{const v=e.target.closest('[data-view]');if(v){const r=state.reports.find(x=>x.id===v.dataset.view);r&&openModal(detailHtml(r));return}
+  const d=e.target.closest('[data-rm]');if(d){if(d.dataset.armed){try{await store.del(d.dataset.rm);toast('ลบแล้ว');refresh()}catch(err){toast('ลบไม่สำเร็จ')}}else{d.dataset.armed=1;d.textContent='ยืนยันลบ?';setTimeout(()=>{if(d.isConnected){delete d.dataset.armed;d.textContent='ลบ'}},3000)}}});
+['qFrom','qTo','qText'].forEach(id=>$('#'+id).addEventListener('input',renderList));
+$('#qClear').onclick=()=>{$('#qFrom').value=$('#qTo').value=$('#qText').value='';renderList()};
+
+/* ---------- export ---------- */
+const HEAD=['วันที่ส่ง','ชื่อ-นามสกุล','รหัสพนักงาน','แผนก/ตำแหน่ง','วันที่ปฏิบัติงาน','ช่วงเวลา','ลำดับ','งานที่ทำ','จำนวน','หน่วย','เวลาเริ่ม','เวลาเสร็จ','ทำร่วมกับ','ลงชื่อ','ลงวันที่','รหัสรายงาน'];
+function allFlat(){return filtered().slice().reverse().flatMap(flatRows)}
+async function saveFile(name,text,mime){if(downloads){try{await downloads.save({filename:name,data:new Blob([text],{type:mime})});return}catch(e){try{await downloads.save({filename:name,data:text});return}catch(e2){}}}
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:mime}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+$('#expCsv').onclick=()=>{const rows=allFlat();if(!rows.length){toast('ไม่มีข้อมูลให้ Export');return}
+  const q=v=>{v=String(v==null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+  const csv='﻿'+[HEAD.join(',')].concat(rows.map(r=>HEAD.map(h=>q(r[h])).join(','))).join('\r\n');
+  saveFile('รายงานการปฏิบัติงาน_'+isoDay(new Date())+'.csv',csv,'text/csv;charset=utf-8');toast('Export แล้ว เปิดด้วย Excel หรือ Google Sheet ได้เลย')};
+$('#expTsv').onclick=async()=>{const rows=allFlat();if(!rows.length){toast('ไม่มีข้อมูล');return}
+  const tsv=[HEAD.join('\t')].concat(rows.map(r=>HEAD.map(h=>String(r[h]==null?'':r[h]).replace(/[\t\n]/g,' ')).join('\t'))).join('\n');
+  try{await navigator.clipboard.writeText(tsv);toast('คัดลอกแล้ว ไปที่ Google Sheet แล้วกด Ctrl+V ที่ช่อง A1',4000)}catch(e){const ta=document.createElement('textarea');ta.value=tsv;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('คัดลอกแล้ว วางใน Google Sheet ได้เลย')}catch(e2){toast('คัดลอกไม่ได้ ใช้ปุ่ม Export แทน')}ta.remove()}};
+/* ---------- stores ---------- */
+const CFG=window.APP_CONFIG||{};const API=(CFG.SHEET_API_URL||'').trim();
+async function api(body){const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body),redirect:'follow'});const j=await r.json();if(!j.ok)throw new Error(j.error||'error');return j}
+function makeSheet(){return{
+  put:(id,v)=>api({action:'submit',report:Object.assign({id},v)}),
+  del:id=>api({action:'delete',id,key:state.key}),
+  list:()=>api({action:'list',key:state.key}).then(j=>j.reports||[])}}
+function makeLocal(){const K='wr-local';const read=()=>{try{return JSON.parse(localStorage.getItem(K)||'{}')}catch(e){return{}}};const write=o=>{try{localStorage.setItem(K,JSON.stringify(o))}catch(e){}};return{
+  put:async(id,v)=>{const o=read();o[id]=v;write(o)},del:async id=>{const o=read();delete o[id];write(o);forgetMine(id)},list:async()=>{const o=read();return Object.keys(o).map(id=>({id,...o[id]}))}}}
+function mine(){try{return JSON.parse(localStorage.getItem('wr-mine')||'[]')}catch(e){return[]}}
+function rememberMine(r){try{const m=mine().filter(x=>x.id!==r.id);m.push(r);while(m.length>60)m.shift();localStorage.setItem('wr-mine',JSON.stringify(m))}catch(e){}if(!state.admin){state.reports=mine();renderList()}}
+function forgetMine(id){try{localStorage.setItem('wr-mine',JSON.stringify(mine().filter(x=>x.id!==id)))}catch(e){}}
+async function refresh(){if(!state.admin){state.reports=mine();state.loaded=true;renderList();return}
+  state.loaded=false;renderList();try{state.reports=await store.list();state.loaded=true;renderList()}catch(e){state.loaded=true;toast('โหลดไม่สำเร็จ: '+e.message,4000);if(/key|รหัส/i.test(e.message))logout();renderList()}}
+function logout(){state.admin=false;state.key='';try{sessionStorage.removeItem('wr-key')}catch(e){}$('#adminLogout').hidden=true;$('#adminLogin').hidden=false;$('#adminKey').hidden=false;refresh()}
+$('#adminLogin').onclick=async()=>{const k=$('#adminKey').value.trim();if(!k&&state.mode!=='local'){toast('กรุณาใส่รหัสผู้ดูแล');return}state.key=k;
+  try{if(state.mode==='sheet')await api({action:'list',key:k,limit:1});state.admin=true;try{sessionStorage.setItem('wr-key',k)}catch(e){}$('#adminKey').value='';$('#adminKey').hidden=true;$('#adminLogin').hidden=true;$('#adminLogout').hidden=false;toast('เข้าสู่ระบบผู้ดูแลแล้ว');refresh()}catch(e){toast('รหัสไม่ถูกต้อง หรือยังไม่ได้ตั้ง ADMIN_KEY',4000)}};
+$('#adminLogout').onclick=logout;$('#reload').onclick=refresh;
+function renderBanner(msg){$('#modeBanner').innerHTML=msg?`<div class="banner warn">${esc(msg)}</div>`:''}
+
+/* ---------- tabs / clock / init ---------- */
+$$('.tab').forEach(b=>b.onclick=()=>{$$('.tab').forEach(x=>x.classList.toggle('on',x===b));$('#tab-form').hidden=b.dataset.tab!=='form';$('#tab-list').hidden=b.dataset.tab!=='list';if(b.dataset.tab==='form')setTimeout(sizeCanvas,0);else renderList()});
+function tick(){const d=new Date();$('#clock').textContent=pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());$('#today').textContent=d.toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+async function init(){
+  tick();setInterval(tick,1000);loadDraft();renderForm();sizeCanvas();
+  $('#ver').textContent='v'+(window.APP_VERSION||'1.0.0');
+  if(CFG.SHEET_VIEW_URL){const a=$('#sheetOpen');a.href=CFG.SHEET_VIEW_URL;a.hidden=false}
+  if(API&&/^https:\/\/script\.google\.com\/.+\/exec$/.test(API)){store=makeSheet();state.mode='sheet'}
+  else{store=makeLocal();state.mode='local';$('#modeBanner').innerHTML='<div class="banner info">โหมดทดลอง: ยังไม่ได้ใส่ SHEET_API_URL ในไฟล์ <code>config.js</code> ข้อมูลจะเก็บในเครื่องนี้เท่านั้น</div>';$('#adminNote').textContent='โหมดทดลอง: กดเข้าสู่ระบบ (ไม่ต้องใส่รหัส) เพื่อดูรายงานทั้งหมดในเครื่องนี้'}
+  let k='';try{k=sessionStorage.getItem('wr-key')||''}catch(e){}
+  if(k){$('#adminKey').value=k;$('#adminLogin').click()}else refresh();
+}
+init();
+</script>
+</body>
+</html>
